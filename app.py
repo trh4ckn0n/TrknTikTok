@@ -1,10 +1,53 @@
-import streamlit as st
-import re
-import logging
+import os
 from datetime import datetime
-import sqlite3
+from flask import Flask, request, jsonify, render_template
+from flask_sqlalchemy import SQLAlchemy
+from flask_compress import Compress
+from flask_minify import Minify
+from flask_cors import CORS
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
+import logging
+import re
+from htmlmin.main import minify
+from csscompressor import compress as compress_css
+from rjsmin import jsmin as compress_js
+from scraper.scrape import tt_scrape  # Assuming the importing of your scraping logic
 
-# Define URL_REGEX at the top level of the script
+# Load environment variables
+from dotenv import load_dotenv
+load_dotenv()
+
+app = Flask(__name__)
+
+# Configuration for database using SQLite
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///videos.db'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+db = SQLAlchemy(app)
+
+# Initialize extensions
+Compress(app)
+Minify(app=app, html=True, js=True, cssless=True)
+CORS(app)
+
+limiter = Limiter(
+    get_remote_address,
+    app=app,
+    default_limits=["200 per day", "5000 per hour"]
+)
+
+# Model for video downloads
+class Video(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    url = db.Column(db.String(255), nullable=False)
+    title = db.Column(db.String(255), nullable=False)
+    download_date = db.Column(db.DateTime, default=datetime.utcnow)
+
+# Initialize the database
+with app.app_context():
+    db.create_all()
+
+# Regex for URL validation
 URL_REGEX = re.compile(
     r'^(https?:\/\/)?'
     r'((?:www\.|m\.)?tiktok\.com|vm\.tiktok\.com|vt\.tiktok\.com)'
@@ -13,63 +56,59 @@ URL_REGEX = re.compile(
     r'(\?[^\s]*)?$'
 )
 
-# Set up logging
 logging.basicConfig(level=logging.INFO)
 
-# Initialize database
-def init_db():
-    conn = sqlite3.connect('videos.db')
-    conn.execute('''CREATE TABLE IF NOT EXISTS videos
-                    (id INTEGER PRIMARY KEY,
-                    url TEXT NOT NULL,
-                    title TEXT NOT NULL,
-                    download_date TIMESTAMP);''')
-    return conn
+@app.route('/')
+def index():
+    rendered_template = render_template('index.html')
+    minified_template = minify(rendered_template, remove_empty_space=True)
+    minified_template = re.sub(
+        r'<style>(.*?)<\/style>',
+        lambda match: f"<style>{compress_css(match.group(1))}</style>",
+        minified_template,
+        flags=re.DOTALL
+    )
+    minified_template = re.sub(
+        r'<script>(.*?)<\/script>',
+        lambda match: f"<script>{compress_js(match.group(1))}</script>",
+        minified_template,
+        flags=re.DOTALL
+    )
+    return minified_template
 
-# Save video info function
-def save_video_info(conn, url, title):
-    conn.execute("INSERT INTO videos (url, title, download_date) VALUES (?, ?, ?)",
-                 (url, title, datetime.utcnow()))
-    conn.commit()
+@app.route('/download', methods=['GET'])
+@limiter.limit("5000 per minute")
+def download():
+    tiktok_url = request.args.get('url')
 
-# Function to process the video download
-def process_download(tiktok_url):
     if not tiktok_url or not re.match(URL_REGEX, tiktok_url):
-        st.error('Invalid or missing URL parameter')
-        return None
+        logging.error('Invalid or missing URL parameter')
+        return jsonify({'status': False, 'message': 'Invalid or missing URL parameter'}), 400
 
     try:
-        # Make sure tt_scrape function is correctly imported and available in your script
         data = tt_scrape(tiktok_url)
+        # Assuming tt_scrape returns a dictionary with 'title' attribute when successful
         if data.get('status'):
-            conn = init_db()
-            save_video_info(conn, tiktok_url, data.get('title', 'No Title'))
-            conn.close()
-            return data
+            save_video_info(tiktok_url, data.get('title', 'No Title'))
+            return jsonify(data)
         else:
-            st.warning('Failed to fetch video details')
-            return None
+            logging.warning('Failed to fetch video details')
+            return jsonify({'status': False, 'message': 'Failed to fetch video details'}), 400
     except Exception as e:
         logging.error(f'Error scraping data: {e}')
-        st.error('Error scraping data')
-        return None
+        return jsonify({'status': False, 'message': 'Error scraping data'}), 500
 
-# UI setup
-st.title("TikTokPy Streamlit App")
-tiktok_url = st.text_input("Enter TikTok URL:")
-if st.button("Download"):
-    data = process_download(tiktok_url)
-    if data:
-        st.success(f"Video '{data.get('title')}' fetched successfully!")
-        st.image(data.get('thumbnail_url'))  # Ensure tt_scrape provides a valid thumbnail URL
-        st.write("Download Options: ")
-        st.download_button("Download Video", data.get('video_link'))   # Ensure correct download link handling
-        st.download_button("Download Audio", data.get('audio_link'))   # Ensure correct download link handling
+# Helper function to save video info
+def save_video_info(url, title):
+    new_video = Video(url=url, title=title)
+    db.session.add(new_video)
+    db.session.commit()
 
-# Display past downloads
-if st.checkbox("Show Past Downloads"):
-    conn = init_db()
-    downloads = conn.execute("SELECT title, url, download_date FROM videos").fetchall()
-    conn.close()
-    for download in downloads:
-        st.write(f"{download[0]} - {download[1]} - Downloaded on {download[2]}")
+@app.route('/videos')
+def list_videos():
+    videos = Video.query.all()
+    return render_template('video_list.html', videos=videos)
+
+if __name__ == '__main__':
+    port = int(os.environ.get('PORT', 5000))
+    app.run(host='0.0.0.0', port=port)
