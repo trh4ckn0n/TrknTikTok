@@ -75,6 +75,33 @@
             max-height: 250px;
             background-color: #1a1a1a; /* Fond autour de l'image pour le contraste */
         }
+        .background-video {
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          opacity: 0.5; /* Opacité pour l'arrière-plan */
+          z-index: -1;
+        }
+
+        /* Conteneur pour centrer le contenu */
+        .content {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          height: 100vh;
+          color: #fff;
+          z-index: 1;
+        }
+
+        /* Style pour la seconde vidéo en autoplay sans contrôles */
+        .video-autoplay {
+          width: 640px; /* Ajuster la largeur selon les besoins */
+          height: auto;
+          border: 2px solid #333;
+        }
     </style>
 </head>
 <body class="p-4 flex flex-col min-h-screen bg-gradient-to-b from-blue-900 to-purple-900">
@@ -101,6 +128,10 @@
         </div>
     </main>
 
+     <video class="video-autoplay" autoplay playsinline loop>
+        <source src="https://f.top4top.io/m_32211xe4y0.mp4" type="video/mp4">
+        Votre navigateur ne supporte pas cette vidéo.
+      </video>
     <footer class="text-white text-center py-4 mt-10">
         <p class="mb-2">Crafted with ❤️ by <a href="https://github.com/tucommenceapousser" target="_blank" class="underline hover:text-purple-300 transition duration-300">TRHACKNON</a></p>
         <a href="https://github.com/tucommenceapousser/TikTokPy" target="_blank" class="inline-flex items-center bg-white bg-opacity-20 px-4 py-2 rounded-full hover:bg-opacity-30 transition duration-300 hover-lift">
