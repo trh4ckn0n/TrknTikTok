@@ -33,7 +33,8 @@
     <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
     <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
-
+    <link href="//vjs.zencdn.net/8.19.1/video-js.min.css" rel="stylesheet">
+    <script src="//vjs.zencdn.net/8.19.1/video.min.js"></script>
     <style>
         /* Additional fun styles */
         .neon-text {
@@ -100,7 +101,23 @@
         .video-autoplay {
           width: 640px; /* Ajuster la largeur selon les besoins */
           height: auto;
-          border: 2px solid #00ff88;
+          border: 2px solid #333;
+        }
+        /* Style pour le lecteur vidéo */
+        #my-player {
+          border: 3px solid #00ffcc; /* Bordure fluide en cyan */
+          border-radius: 10px;       /* Coins arrondis */
+          box-shadow: 0 4px 15px rgba(0, 255, 200, 0.4); /* Ombre douce pour effet de profondeur */
+          overflow: hidden;          /* Masque les débordements */
+          transition: transform 0.3s ease, box-shadow 0.3s ease; /* Animation sur hover */
+        }
+
+        /* Effet au survol */
+        #my-player:hover {
+          border: 3px solid blueviolet; /* Bordure fluide en cyan */
+          border-radius: 10px;       /* Coins arrondis */
+          transform: scale(1.05); /* Légère mise en avant au survol */
+          box-shadow: 0 8px 20px rgba(0, 255, 200, 0.6); /* Accentuation de l'ombre */
         }
     </style>
 </head>
@@ -124,14 +141,30 @@
     </div>
 
         <div class="text-center mt-8">
-            <a href="/videos" class="text-blue-500 hover:underline">Voir les vidéos téléchargées précédemment</a>
+            <a href="/videos" class="text-blue-500 hover:underline bord">Voir les vidéos téléchargées précédemment</a>
         </div>
     </main>
-
-     <video class="video-autoplay" autoplay controlsList="nodownload" controls loop>
-        <source src="https://f.top4top.io/m_32211xe4y0.mp4" type="video/mp4">
-        Votre navigateur ne supporte pas cette vidéo.
-      </video>
+    <center><video
+        id="my-player"
+        class="video-js"
+        playsinline
+        autoplay
+        controls
+        loop
+        controlsList="nodownload"
+        width="300"
+        preload="auto"
+        poster="https://g.top4top.io/p_3220ojp8t0.jpg"
+        data-setup='{}'>
+      <source src="https://f.top4top.io/m_32211xe4y0.mp4" type="video/mp4"></source>
+      <p class="vjs-no-js">
+        enable JavaScript
+        <a href="/" target="_blank">
+          supports HTML5 video
+        </a>
+      </p>
+    </video>
+        </center>
     <footer class="text-white text-center py-4 mt-10">
         <p class="mb-2">Crafted with ❤️ by <a href="https://github.com/tucommenceapousser" target="_blank" class="underline hover:text-purple-300 transition duration-300">TRHACKNON</a></p>
         <a href="https://github.com/tucommenceapousser/TrknTikTok" target="_blank" class="inline-flex items-center bg-white bg-opacity-20 px-4 py-2 rounded-full hover:bg-opacity-30 transition duration-300 hover-lift">
