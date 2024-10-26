@@ -20,7 +20,6 @@ load_dotenv()
 
 app = Flask(__name__)
 
-# Configuration for database using SQLite
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///videos.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
