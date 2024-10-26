@@ -1,11 +1,10 @@
 import streamlit as st
 import re
 import logging
-from scraper.scrape import tt_scrape  # Adjust this import according to your file structure
 from datetime import datetime
 import sqlite3
 
-# Define URL_REGEX for TikTok URL validation
+# Define URL_REGEX at the top level of the script
 URL_REGEX = re.compile(
     r'^(https?:\/\/)?'
     r'((?:www\.|m\.)?tiktok\.com|vm\.tiktok\.com|vt\.tiktok\.com)'
@@ -40,6 +39,7 @@ def process_download(tiktok_url):
         return None
 
     try:
+        # Make sure tt_scrape function is correctly imported and available in your script
         data = tt_scrape(tiktok_url)
         if data.get('status'):
             conn = init_db()
@@ -61,10 +61,10 @@ if st.button("Download"):
     data = process_download(tiktok_url)
     if data:
         st.success(f"Video '{data.get('title')}' fetched successfully!")
-        st.image(data.get('thumbnail_url'))  # Assuming tt_scrape provides a thumbnail URL
+        st.image(data.get('thumbnail_url'))  # Ensure tt_scrape provides a valid thumbnail URL
         st.write("Download Options: ")
-        st.download_button("Download Video", data.get('video_link'))   # Provide the way to fetch/download the actual file
-        st.download_button("Download Audio", data.get('audio_link'))   # Provide the way to fetch/download the actual file
+        st.download_button("Download Video", data.get('video_link'))   # Ensure correct download link handling
+        st.download_button("Download Audio", data.get('audio_link'))   # Ensure correct download link handling
 
 # Display past downloads
 if st.checkbox("Show Past Downloads"):
