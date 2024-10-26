@@ -1,14 +1,23 @@
 import streamlit as st
 import re
 import logging
-from scraper.scrape import tt_scrape
+from scraper.scrape import tt_scrape  # Adjust this import according to your file structure
 from datetime import datetime
 import sqlite3
+
+# Define URL_REGEX for TikTok URL validation
+URL_REGEX = re.compile(
+    r'^(https?:\/\/)?'
+    r'((?:www\.|m\.)?tiktok\.com|vm\.tiktok\.com|vt\.tiktok\.com)'
+    r'(:[0-9]{1,5})?'
+    r'(\/[@\w\/.-]*)?'
+    r'(\?[^\s]*)?$'
+)
 
 # Set up logging
 logging.basicConfig(level=logging.INFO)
 
-# Setup database connection
+# Initialize database
 def init_db():
     conn = sqlite3.connect('videos.db')
     conn.execute('''CREATE TABLE IF NOT EXISTS videos
@@ -24,7 +33,7 @@ def save_video_info(conn, url, title):
                  (url, title, datetime.utcnow()))
     conn.commit()
 
-# Functionality for processing the video download
+# Function to process the video download
 def process_download(tiktok_url):
     if not tiktok_url or not re.match(URL_REGEX, tiktok_url):
         st.error('Invalid or missing URL parameter')
@@ -33,7 +42,9 @@ def process_download(tiktok_url):
     try:
         data = tt_scrape(tiktok_url)
         if data.get('status'):
-            save_video_info(tiktok_url, data.get('title', 'No Title'))
+            conn = init_db()
+            save_video_info(conn, tiktok_url, data.get('title', 'No Title'))
+            conn.close()
             return data
         else:
             st.warning('Failed to fetch video details')
@@ -47,7 +58,6 @@ def process_download(tiktok_url):
 st.title("TikTokPy Streamlit App")
 tiktok_url = st.text_input("Enter TikTok URL:")
 if st.button("Download"):
-    conn = init_db()
     data = process_download(tiktok_url)
     if data:
         st.success(f"Video '{data.get('title')}' fetched successfully!")
@@ -55,12 +65,11 @@ if st.button("Download"):
         st.write("Download Options: ")
         st.download_button("Download Video", data.get('video_link'))   # Provide the way to fetch/download the actual file
         st.download_button("Download Audio", data.get('audio_link'))   # Provide the way to fetch/download the actual file
-    conn.close()
 
 # Display past downloads
 if st.checkbox("Show Past Downloads"):
     conn = init_db()
     downloads = conn.execute("SELECT title, url, download_date FROM videos").fetchall()
+    conn.close()
     for download in downloads:
         st.write(f"{download[0]} - {download[1]} - Downloaded on {download[2]}")
-    conn.close()
