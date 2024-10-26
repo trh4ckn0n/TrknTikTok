@@ -1,0 +1,101 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #000033 0%, #001f4d 100%);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 20px;
+}
+
+.glass-effect {
+    background: rgba(0, 0, 50, 0.45);
+    backdrop-filter: blur(10px);
+    border-radius: 15px;
+    border: 2px solid rgba(255, 255, 255, 0.7);
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+}
+
+.material-icons {
+    font-size: 28px;
+    vertical-align: middle;
+    margin-right: 8px;
+    color: #33ffcc;  /* Fluorescent color */
+}
+
+.animate-pulse {
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: .5;
+    }
+}
+
+.hover-lift {
+    transition: transform 0.3s ease;
+    will-change: transform; /* Hardware acceleration */
+}
+
+.hover-lift:hover {
+    transform: translateY(-8px) scale(1.05);
+}
+
+input[type="text"], 
+button {
+    border: 1px solid #33ffcc;
+    transition: border 0.3s ease, background-color 0.3s ease;
+}
+
+input[type="text"]:focus, 
+button:hover {
+    border: 2px solid #ff00ff; /* Fluorescent border */
+    background-color: rgba(50, 50, 150, 0.8);
+}
+
+button {
+    background-color: #000033;
+    color: #33ffcc; /* Fluorescent text */
+    padding: 12px 24px;
+    border-radius: 12px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+button:focus {
+    outline: none;
+    box-shadow: 0 0 0 4px rgba(50, 50, 150, 0.7);
+}
+
+footer {
+    text-align: center;
+    font-weight: 400;
+    color: #999; /* Light grey */
+}
+
+footer a {
+    color: #33ffcc; /* Fluorescent link */
+    transition: color 0.3s ease;
+}
+
+footer a:hover {
+    color: #ff00ff;
+}
+
+.swiper-container {
+    width: 100%;
+    padding-top: 50px;
+    padding-bottom: 50px;
+}
+.swiper-slide {
+    background-position: center;
+    background-size: cover;
+    width: 300px;
+    height: 300px;
+}

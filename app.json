@@ -1,0 +1,33 @@
+{
+  "name": "TikTok Video Downloader",
+  "description": "An app to download TikTok videos and view previously downloaded videos",
+    "stack": "heroku-20",
+    "repository": "https://github.com/tucommenceapousser/TikTokPy",
+    "keywords": [
+        "flask",
+        "minify",
+        "tiktok-downloader",
+        "python",
+        "htmlmin",
+        "csscompressor",
+        "rjsmin",
+  "addons": [
+    {
+      "plan": "heroku-postgresql"
+    }
+  ],
+  "env": {
+    "FLASK_ENV": {
+      "description": "The environment in which the app runs",
+      "value": "production"
+    }
+  },
+  "scripts": {
+    "postdeploy": "python -m flask db upgrade"
+  },
+  "buildpacks": [
+    {
+      "url": "heroku/python"
+    }
+  ]
+}

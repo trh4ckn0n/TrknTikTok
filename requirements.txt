@@ -1,0 +1,23 @@
+Flask>=2.3.2  # Framework web.
+Werkzeug>=2.3.2  # Toolkit HTTP.
+requests>=2.31.0  # HTTP requests.
+htmlmin  # Minify HTML.
+csscompressor  # Minify CSS.
+rjsmin  # Minify JavaScript.
+beautifulsoup4  # Parsing HTML.
+flask-compress  # Compress responses.
+flask-minify  # Minify HTML, CSS, and JS.
+flask-cors  # Cross-Origin Resource Sharing support.
+flask-limiter  # Rate limiting for Flask routes.
+python-dotenv  # Load environment variables from .env file.
+csscompressor
+flask
+flask-compress
+flask-cors
+flask-limiter
+flask-minify
+htmlmin
+python-dotenv
+rjsmin
+flask-sqlalchemy
+gunicorn
