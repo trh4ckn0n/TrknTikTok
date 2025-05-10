@@ -1,97 +1,108 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
 
 body {
-    font-family: 'Poppins', sans-serif;
-    background: linear-gradient(135deg, #000033 0%, #001f4d 100%);
+    font-family: 'Orbitron', sans-serif;
+    background: linear-gradient(120deg, #0f0c29, #302b63, #24243e);
+    background-size: 400% 400%;
+    animation: animatedBg 20s ease infinite;
     min-height: 100vh;
     display: flex;
     flex-direction: column;
     justify-content: center;
     padding: 20px;
+    color: #ffffffcc;
+}
+
+@keyframes animatedBg {
+    0% {background-position: 0% 50%;}
+    50% {background-position: 100% 50%;}
+    100% {background-position: 0% 50%;}
 }
 
 .glass-effect {
-    background: rgba(0, 0, 50, 0.45);
-    backdrop-filter: blur(10px);
-    border-radius: 15px;
-    border: 2px solid rgba(255, 255, 255, 0.7);
-    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(12px);
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 0 20px rgba(0, 255, 255, 0.2);
+    padding: 20px;
 }
 
 .material-icons {
     font-size: 28px;
     vertical-align: middle;
     margin-right: 8px;
-    color: #33ffcc;  /* Fluorescent color */
+    color: #00ffc3;
 }
 
 .animate-pulse {
-    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    animation: pulse 1.6s ease-in-out infinite;
 }
 
 @keyframes pulse {
-    0%, 100% {
-        opacity: 1;
-    }
-    50% {
-        opacity: .5;
-    }
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.6; }
 }
 
 .hover-lift {
     transition: transform 0.3s ease;
-    will-change: transform; /* Hardware acceleration */
 }
 
 .hover-lift:hover {
-    transform: translateY(-8px) scale(1.05);
+    transform: translateY(-6px) scale(1.03);
 }
 
 input[type="text"], 
 button {
-    border: 1px solid #33ffcc;
-    transition: border 0.3s ease, background-color 0.3s ease;
+    border: 2px solid transparent;
+    border-radius: 10px;
+    padding: 12px;
+    font-size: 16px;
+    background-color: rgba(255, 255, 255, 0.05);
+    color: #ffffff;
+    transition: all 0.3s ease;
 }
 
 input[type="text"]:focus, 
 button:hover {
-    border: 2px solid #ff00ff; /* Fluorescent border */
-    background-color: rgba(50, 50, 150, 0.8);
+    border-color: #00ffc3;
+    background-color: rgba(0, 0, 0, 0.3);
+    box-shadow: 0 0 10px #00ffc3aa;
 }
 
 button {
-    background-color: #000033;
-    color: #33ffcc; /* Fluorescent text */
-    padding: 12px 24px;
-    border-radius: 12px;
-    font-weight: 600;
-    cursor: pointer;
+    background-color: #00ffc3;
+    color: #000;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
 }
 
 button:focus {
     outline: none;
-    box-shadow: 0 0 0 4px rgba(50, 50, 150, 0.7);
+    box-shadow: 0 0 10px #00ffc3, 0 0 20px #00ffc3aa;
 }
 
 footer {
     text-align: center;
     font-weight: 400;
-    color: #999; /* Light grey */
+    color: #aaa;
 }
 
 footer a {
-    color: #33ffcc; /* Fluorescent link */
+    color: #00ffc3;
+    text-decoration: none;
     transition: color 0.3s ease;
 }
 
 footer a:hover {
-    color: #ff00ff;
+    color: #ff2dfd;
 }
 
 .swiper-container {
     width: 100%;
-    padding-top: 50px;
-    padding-bottom: 50px;
+    padding-top: 40px;
+    padding-bottom: 40px;
 }
 .swiper-slide {
     background-position: center;
@@ -100,11 +111,12 @@ footer a:hover {
     height: 300px;
 }
 .bord {
-    border: 1px solid #33ffcc;
-    transition: border 0.3s ease, background-color 0.3s ease;
-    background-color: rgb(255, 255, 0, 0.8);
+    border: 1px solid #00ffc3;
+    background: rgba(0, 255, 195, 0.1);
+    border-radius: 12px;
+    box-shadow: 0 0 12px #00ffc322;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    padding: 10px;
+    padding: 12px;
 }
