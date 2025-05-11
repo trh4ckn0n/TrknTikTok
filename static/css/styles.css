@@ -1,10 +1,10 @@
-@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@600;900&display=swap');
 
 body {
     font-family: 'Orbitron', sans-serif;
-    background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
-    background-size: 500% 500%;
-    animation: animatedBg 30s ease infinite;
+    background-color: #000;
+    background-image: radial-gradient(circle at top left, #1e1e1e 0%, transparent 40%), 
+                      radial-gradient(circle at bottom right, #1e1e1e 0%, transparent 40%);
     min-height: 100vh;
     margin: 0;
     padding: 20px;
@@ -12,99 +12,83 @@ body {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    color: #e0f7fa;
+    color: #00ffc3;
     overflow-x: hidden;
+    animation: flickerGlow 4s infinite alternate;
 }
 
-@keyframes animatedBg {
-    0% {background-position: 0% 50%;}
-    50% {background-position: 100% 50%;}
-    100% {background-position: 0% 50%;}
+@keyframes flickerGlow {
+    0%, 100% { text-shadow: 0 0 6px #00ffc3; }
+    50% { text-shadow: 0 0 16px #00ffc3, 0 0 24px #ff2dfd; }
 }
 
 .glass-effect {
-    background: linear-gradient(145deg, rgba(255,255,255,0.07), rgba(255,255,255,0.02));
-    backdrop-filter: blur(20px);
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(16px);
+    border: 2px solid rgba(0, 255, 255, 0.2);
     border-radius: 20px;
-    border: 2px solid rgba(0, 255, 255, 0.3);
-    box-shadow: 0 0 30px rgba(0, 255, 255, 0.3), 0 0 60px rgba(255, 0, 255, 0.1);
+    box-shadow: 0 0 20px rgba(0, 255, 195, 0.25),
+                0 0 40px rgba(255, 0, 255, 0.1);
     padding: 30px;
     transition: all 0.3s ease-in-out;
 }
 
 .glass-effect:hover {
-    box-shadow: 0 0 40px rgba(0, 255, 255, 0.5), 0 0 80px rgba(255, 0, 255, 0.2);
-    transform: scale(1.02);
+    transform: scale(1.05);
+    box-shadow: 0 0 30px #00ffc3, 0 0 60px #ff2dfd88;
 }
 
 .material-icons {
-    font-size: 32px;
-    vertical-align: middle;
-    margin-right: 10px;
+    font-size: 36px;
     color: #00ffc3;
-    filter: drop-shadow(0 0 4px #00ffc3aa);
-}
-
-.animate-pulse {
-    animation: pulse 2s infinite;
-}
-
-@keyframes pulse {
-    0%, 100% { opacity: 1; transform: scale(1); }
-    50% { opacity: 0.7; transform: scale(1.05); }
-}
-
-.hover-lift {
+    text-shadow: 0 0 6px #00ffc3;
     transition: transform 0.3s ease;
 }
 
-.hover-lift:hover {
-    transform: translateY(-8px) scale(1.04);
+.material-icons:hover {
+    transform: rotate(10deg) scale(1.2);
 }
 
 input[type="text"], 
 button {
-    border: 2px solid rgba(0, 255, 195, 0.4);
-    border-radius: 12px;
-    padding: 14px;
+    background: #111;
+    color: #00ffc3;
+    border: 2px solid #00ffc3;
+    border-radius: 10px;
+    padding: 12px 18px;
     font-size: 18px;
-    background-color: rgba(255, 255, 255, 0.08);
-    color: #e0f7fa;
-    transition: all 0.3s ease;
+    margin: 8px 0;
+    box-shadow: 0 0 12px #00ffc3aa;
+    transition: all 0.3s ease-in-out;
 }
 
 input[type="text"]:focus, 
 button:hover {
-    border-color: #00ffc3;
-    background-color: rgba(0, 0, 0, 0.35);
-    box-shadow: 0 0 12px #00ffc3cc;
+    background: #000;
+    box-shadow: 0 0 20px #00ffc3cc;
+    border-color: #ff2dfd;
 }
 
 button {
-    background-color: #00ffc3;
+    background: linear-gradient(90deg, #00ffc3, #ff2dfd);
     color: #000;
-    font-weight: 900;
+    font-weight: bold;
     text-transform: uppercase;
-    letter-spacing: 1.5px;
-    box-shadow: 0 0 12px #00ffc388;
-}
-
-button:focus {
-    outline: none;
-    box-shadow: 0 0 16px #00ffc3, 0 0 32px #00ffc3aa;
+    letter-spacing: 2px;
+    box-shadow: 0 0 12px #ff2dfd88;
 }
 
 footer {
-    margin-top: 40px;
     text-align: center;
-    font-weight: 400;
-    color: #aaa;
+    margin-top: 40px;
+    color: #666;
+    font-size: 14px;
 }
 
 footer a {
     color: #00ffc3;
     text-decoration: none;
-    transition: color 0.3s ease, text-shadow 0.3s ease;
+    transition: all 0.3s ease;
 }
 
 footer a:hover {
@@ -112,33 +96,46 @@ footer a:hover {
     text-shadow: 0 0 6px #ff2dfd;
 }
 
+.animate-pulse {
+    animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.6; transform: scale(1.05); }
+}
+
+.hover-lift {
+    transition: transform 0.3s ease;
+}
+
+.hover-lift:hover {
+    transform: translateY(-6px) scale(1.05);
+}
+
 .swiper-container {
     width: 100%;
-    padding-top: 60px;
-    padding-bottom: 60px;
+    padding: 60px 0;
 }
 
 .swiper-slide {
-    background-position: center;
-    background-size: cover;
-    width: 320px;
-    height: 320px;
+    width: 300px;
+    height: 300px;
+    background-color: #111;
     border-radius: 20px;
-    box-shadow: 0 0 25px rgba(0, 255, 195, 0.3);
+    box-shadow: 0 0 16px #00ffc388;
 }
 
 .bord {
     border: 2px solid #00ffc3;
-    background: rgba(0, 255, 195, 0.12);
+    background: rgba(0, 255, 195, 0.05);
     border-radius: 16px;
-    box-shadow: 0 0 18px #00ffc322;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    padding: 16px;
-    transition: box-shadow 0.3s ease;
+    padding: 20px;
+    box-shadow: 0 0 20px #00ffc366;
+    transition: all 0.3s ease-in-out;
 }
 
 .bord:hover {
-    box-shadow: 0 0 28px #00ffc366;
+    box-shadow: 0 0 32px #00ffc388;
+    transform: scale(1.02);
 }
